@@ -8,11 +8,14 @@ The instructor's specialty (e.g. dad jokes, excitement, dancing, etc.)
 A method to assign an exercise to a student
 """
 
-class Instructor():
+from person import Person
+
+class Instructor(Person):
     def __init__(self, first, last, slack, specialty):
-        self.first = first
-        self.last = last
-        self.slack = slack
+        super().__init__(first, last, slack)
+        # self.first = first
+        # self.last = last
+        # self.slack = slack
         self.cohort = ""
         self.specialty = specialty
 

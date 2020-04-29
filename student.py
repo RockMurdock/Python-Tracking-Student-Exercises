@@ -9,10 +9,13 @@ The student's cohort
 The collection of exercises that the student is currently working on
 """
 
-class Student():
+from person import Person
+
+class Student(Person):
     def __init__(self, first, last, slack):
-        self.first = first
-        self.last = last
-        self.slack = slack
+        super.__init__(first, last, slack)
+        # self.first = first
+        # self.last = last
+        # self.slack = slack
         self.cohort = ""
         self.exercises = list()

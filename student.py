@@ -13,7 +13,7 @@ from person import Person
 
 class Student(Person):
     def __init__(self, first, last, slack):
-        super.__init__(first, last, slack)
+        super().__init__(first, last, slack)
         # self.first = first
         # self.last = last
         # self.slack = slack

@@ -182,6 +182,123 @@ class StudentExerciseReports():
             [print(s) for s in all_instructors]
             print("----------------------------------------")
 
+    def student_workload(self):
+
+        """Retrieve all students and the exercises they are working on"""
+
+        students = dict()
+
+        with sqlite3.connect(self.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+                SELECT
+                    s.Id,
+                    s.First_Name,
+                    s.Last_Name,
+                    e.Id,
+                    e.NAME
+                FROM Student s
+                JOIN Student_Exercises se ON se.StudentId = s.Id
+                JOIN Exercise e ON e.Id = se.ExerciseId
+            """)                            
+
+            dataset = db_cursor.fetchall()
+
+            for row in dataset:
+                student_id = row[0]
+                student_name = f'{row[1]} {row[2]}'
+                exercise_id = row[3]
+                exercise_name = row[4]
+
+                if student_name not in students:
+                    students[student_name] = [exercise_name]
+                else:
+                    students[student_name].append(exercise_name)
+
+            for student_name, exercises in students.items():
+                print(f'\n\n{student_name} is working on:')
+                for exercise in exercises:
+                    print(f'\t* {exercise}')
+
+    # def assigned_exercises(self):
+
+    #     """Retrieve all exercises assigned by each instructor"""
+
+    #     instructors = dict()
+
+    #     with sqlite3.connect(self.db_path) as conn:
+    #         db_cursor = conn.cursor()
+
+    #         db_cursor.execute(""" 
+    #             SELECT
+    #                 i.Id,
+    #                 i.First_Name,
+    #                 i.Last_Name,
+    #                 e.Id,
+    #                 e.NAME
+    #             FROM Instructor i
+    #             JOIN Student_Exercises se ON se.InstructorId = i.Id
+    #             JOIN Exercise e ON e.Id = se.ExerciseId    """)
+
+    #         dataset = db_cursor.fetchall()
+
+    #         for row in dataset:
+    #             instructor_id = row[0]
+    #             instructor_name = f'{row[1]} {row[2]}'
+    #             exercise_id = row[3]
+    #             exercise_name = row[4]
+
+    #             if instructor_name not in instructors:
+    #                 instructors[instructor_name] = [exercise_name]
+    #             else:
+    #                 instructors[instructor_name].append(exercise_name)
+
+    #         for instructor_name, exercises in instructors.items():
+    #             print(f'\n\n{instructor_name} has assigned:')
+    #             for exercise in exercises:                                            
+    #                 print(f"\t* {exercise}")
+
+    def popular_exercises(self):
+
+        """Retrieve all exercises and students assigned"""
+
+        exercises = dict()
+
+        with sqlite3.connect(self.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+                SELECT
+                    e.Id,
+                    e.NAME,
+                    s.Id,
+                    s.First_Name,
+                    s.Last_Name
+                FROM Exercise e
+                JOIN Student_Exercises se ON se.StudentId = e.Id
+                JOIN Student s ON s.Id = se.ExerciseId
+            """)                            
+
+            dataset = db_cursor.fetchall()
+
+            for row in dataset:
+                student_id = row[2]
+                student_name = f'{row[3]} {row[4]}'
+                exercise_id = row[0]
+                exercise_name = row[1]
+
+                if exercise_name not in exercises:
+                    exercises[exercise_name] = [student_name]
+                else:
+                    exercises[exercise_name].append(student_name)
+
+            for exercise_name, students in exercises.items():
+                print(f'\n\n{exercise_name} is being worked on by:')
+                for student in students:
+                    print(f'\t* {student}')
+
+
 reports = StudentExerciseReports()
 reports.all_cohorts()
 reports.all_exercises()
@@ -190,3 +307,6 @@ reports.python_exercises()
 reports.c_sharp_exercises()
 reports.all_students()
 reports.all_instructors()
+reports.student_workload()
+# reports.assigned_exercises()
+reports.popular_exercises()

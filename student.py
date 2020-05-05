@@ -9,13 +9,24 @@ The student's cohort
 The collection of exercises that the student is currently working on
 """
 
-from person import Person
+class Student():
 
-class Student(Person):
-    def __init__(self, first, last, slack):
-        super().__init__(first, last, slack)
-        # self.first = first
-        # self.last = last
-        # self.slack = slack
-        self.cohort = ""
-        self.exercises = list()
+    def __init__(self, first, last, slack, cohort):
+        self.first_name = first
+        self.last_name = last
+        self.slack = slack
+        self.cohort = cohort
+
+    def __repr__(self):
+        return f'{self.first_name} {self.last_name} is in {self.cohort}'
+
+# from person import Person
+
+# class Student(Person):
+#     def __init__(self, first, last, slack):
+#         super().__init__(first, last, slack)
+#         # self.first = first
+#         # self.last = last
+#         # self.slack = slack
+#         self.cohort = ""
+#         self.exercises = list()
